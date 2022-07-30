@@ -1,32 +1,59 @@
 import { Component } from '@angular/core';
+import { SigninService } from './signin.service';
 
 @Component({
   selector: 'app-root',
   template: `
-    <!--The content below is only a placeholder and can be replaced.-->
-    <div style="text-align:center" class="content">
-      <h1>
-        Welcome to {{title}}!
-      </h1>
-      <span style="display: block">{{ title }} app is running!</span>
-      <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+    <div class="flex flex-col min-h-screen justify-center bg-slate-100">
+      <header class="mt-6 w-10/12 mx-auto">
+        <h1 class="text-center text-5xl text-blue-500">My Favorite K-Dramas</h1>
+        <div class="border border-1 border-blue-200 mt-6 mb-3"></div>
+        <nav class="mx-3">
+          <ul class="flex justify-end text-slate-500">
+            <li>
+              <a routerLink="/dramas">HOME</a>
+            </li>
+            <li *ngIf="this.signinService.isLoggedIn">
+              <a routerLink="/profile">PROFILE</a>
+            </li>
+            <li *ngIf="!this.signinService.isLoggedIn">
+              <button (click)="login()">LOG IN</button>
+            </li>
+            <li *ngIf="this.signinService.isLoggedIn">
+              <button (click)="logout()">LOG OUT</button>
+            </li>
+          </ul>
+        </nav>
+        <div class="border border-1 border-blue-200 mb-6 mt-3"></div>
+      </header>
+      <main class="my-12 mx-auto flex-grow">
+        <router-outlet></router-outlet>
+      </main>
+      <footer class="flex justify-center mb-3">
+        <p class="text-sm text-slate-800">
+          This is a sample site showcasing Angular security mechanisms by
+          <a href="https://alisaduncan.dev" class="underline text-blue-500 hover:text-orange-400">Alisa Duncan</a>. Use at your own risk.
+        </p>
+      </footer>
     </div>
-    <h2>Here are some links to help you start: </h2>
-    <ul>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-      </li>
-    </ul>
-    <router-outlet></router-outlet>
   `,
-  styles: []
+  styles: [
+  `
+      nav li+li {
+        margin-left: 1.5rem;
+      }
+  `
+  ]
 })
 export class AppComponent {
-  title = 'angular-security';
+
+  constructor(public signinService: SigninService) { }
+
+  public login(): void {
+    this.signinService.login();
+  }
+
+  public logout(): void {
+    this.signinService.logout();
+  }
 }
